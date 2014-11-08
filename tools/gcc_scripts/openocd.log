@@ -1,0 +1,13 @@
+Info : only one transport option; autoselect 'jtag'
+adapter speed: 1000 kHz
+cc3200_dbginit
+Info : clock speed 1000 kHz
+Info : JTAG tap: cc3200.jrc tap/device found: 0x0b97c02f (mfg: 0x017, part: 0xb97c, ver: 0x0)
+Info : JTAG tap: cc3200.dap enabled
+Info : cc3200.cpu: hardware has 6 breakpoints, 4 watchpoints
+Info : accepting 'gdb' connection from pipe
+target state: halted
+target halted due to debug-request, current mode: Thread 
+xPSR: 0x81000000 pc: 0x00003202 msp: 0x20003f80
+Warn : acknowledgment received, but no packet pending
+Info : dropped 'gdb' connection

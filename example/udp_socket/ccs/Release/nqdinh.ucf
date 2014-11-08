@@ -1,0 +1,4 @@
+#Tue Oct 14 13:12:44 ICT 2014
+com=4
+interface=CC3x Serial(UART) Interface
+device=SimpleLink Wifi CC3100/CC3200
