@@ -31,6 +31,7 @@ Copy this file to `/tools/gcc_scripts`.
 
 First, make sure you got openocd setup by running `openocd -f cc3200.cfg`, you should get
 output like
+
       Open On-Chip Debugger 0.7.0 (2013-10-22-08:31)
       Licensed under GNU GPL v2
       For bug reports, read
