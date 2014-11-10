@@ -1,10 +1,15 @@
 CC3200 Development under Linux
 ================================================================================
 
-This document contains a HOWTO on developing applications for the TI CC3200
+>**Note:**
+
+> - This document contains a HOWTO on developing applications for the TI CC3200
 Launchpad under Ubuntu 64bit. It is a work-in-progress, but all information contained
 should work and has been tested on my Ubuntu system. If you feel that
 something is missing, can be improved or is wrong, please let me know.
+
+> - Libs and examples are extracted from TI CC3200SDK v1.0.0. I will keep this project
+up-to-date with TI SDK release.
 
 Setup
 ---------------------
