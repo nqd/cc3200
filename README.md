@@ -30,7 +30,7 @@ backchannel
 
 Build your first example
 ---------------------
-Take `example/blinky' as example.
+Take `example/blinky` as example.
 Go to gcc, type `make -f Makefile`, you will see the blinky.axf generated under `exe` folder.
 Copy this file to `/tools/gcc_scripts`.
 
