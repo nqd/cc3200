@@ -62,6 +62,18 @@ VPATH=..
 VPATH+=../../drivers
 VPATH+=../../common
 
+#
+# Where to find header files that do not live in the source directory.
+#
+IPATH=..
+IPATH+=../..
+IPATH+=../../common
+IPATH+=../../../inc
+IPATH+=../../../oslib
+IPATH+=../../../driverlib
+IPATH+=../../../simplelink
+IPATH+=../../../simplelink/source
+IPATH+=../../../simplelink/include
 
 ###### returns all sources in examples directory ######
 SOURCES   = $(wildcard *.c)
@@ -98,7 +110,7 @@ NAME = get_time
 
 CFLAGS += -I$(CCWARE_INSTALLATION_DIR)/.. -I$(CCWARE_INSTALLATION_DIR)/../inc -I$(CCWARE_INSTALLATION_DIR)/../driverlib -I$(CCWARE_INSTALLATION_DIR)/../oslib -I$(CCWARE_INSTALLATION_DIR)/../simplelink -I$(CCWARE_INSTALLATION_DIR)/../simplelink/Include -I$(CCWARE_INSTALLATION_DIR)/../oslib -I$(CCWARE_INSTALLATION_DIR)/../example/common -DUSE_TIRTOS
 
-OTHERPROJECT = $(CCWARE_INSTALLATION_DIR)/../ti_rtos/ti_rtos_config/GCC/configPkg
+OTHERPROJECT = $(CCWARE_INSTALLATION_DIR)/../ti_rtos/ti_rtos_config/gcc/configPkg
 ###### Extend linker options here ######
 LFLAGS =  -mcpu=cortex-m4 -march=armv7e-m -mthumb -mfloat-abi=soft -nostartfiles -static -Wl,-Map,${BINDIR}/$(NAME).map -Wl,--gc-sections -Wl,-T,cc3200.lds -Wl,-T,$(OTHERPROJECT)/linker.cmd -lsimplelink -ldriver -ltirtos -lgcc -lc -lm -lrdimon -L$(CCWARE_INSTALLATION_DIR)/../oslib/gcc/exe -L$(CCWARE_INSTALLATION_DIR)/../driverlib/gcc/exe -L$(CCWARE_INSTALLATION_DIR)/../simplelink/gcc/exe
 

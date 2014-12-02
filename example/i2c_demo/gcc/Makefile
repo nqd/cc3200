@@ -63,15 +63,15 @@ CFLAGS+=-DUSER_INPUT_ENABLE
 #
 # Where to find header files that do not live in the source directory.
 #
-IPATH=..
-IPATH+=../..
-IPATH+=../../common
-IPATH+=../../../inc
-IPATH+=../../../oslib
-IPATH+=../../../driverlib
-IPATH+=../../../simplelink
-IPATH+=../../../simplelink/source
-IPATH+=../../../simplelink/include
+#IPATH=..
+#IPATH+=../..
+IPATH+=${ROOT}/example/common
+IPATH+=${ROOT}/inc
+IPATH+=${ROOT}/oslib
+IPATH+=${ROOT}/driverlib
+IPATH+=${ROOT}/simplelink
+IPATH+=${ROOT}/simplelink/source
+IPATH+=${ROOT}/simplelink/include
 #IPATH+=../../../third_party/FreeRTOS
 #IPATH+=../../../third_party/FreeRTOS/source
 #IPATH+=../../../third_party/FreeRTOS/source/portable/GCC/ARM_CM4
