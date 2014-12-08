@@ -83,17 +83,18 @@
 
 // Common interface includes
 #include "uart_if.h"
+#include "gpio_if.h"
 
 #include "pinmux.h"
 
 //*****************************************************************************
 //                      MACRO DEFINITIONS
 //*****************************************************************************
-#define APPLICATION_VERSION     "1.1.0"
+#define APPLICATION_VERSION     "0.0.1"
 #define UART_PRINT              Report
 #define SPAWN_TASK_PRIORITY     9
 #define OSI_STACK_SIZE          1024
-#define APP_NAME                "FreeRTOS Demo"
+#define APP_NAME                "Conlii Client"
 
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- Start
@@ -196,6 +197,15 @@ void vApplicationStackOverflowHook( OsiTaskHandle *pxTask,
 }
 #endif //USE_FREERTOS
 
+/**
+ * initialize led
+ * @return  none
+ */
+void  LEDInit(void) 
+{
+  GPIO_IF_LedConfigure(LED1|LED2|LED3);
+  GPIO_IF_LedOff(MCU_ALL_LED_IND);
+}
 //******************************************************************************
 //
 //! First test task
@@ -210,7 +220,9 @@ void vApplicationStackOverflowHook( OsiTaskHandle *pxTask,
 //******************************************************************************
 void vTestTask1( void *pvParameters )
 {
-   portCHAR *pcMessage;
+  portCHAR *pcMessage;
+  UART_PRINT("Task 1\n\r");
+
     for( ;; )
     {
       /* Wait for a message to arrive. */
@@ -237,18 +249,22 @@ void vTestTask1( void *pvParameters )
 //******************************************************************************
 void vTestTask2( void *pvParameters )
 {
-   unsigned long ul_2;
-   const portCHAR *pcInterruptMessage[4] = {"Welcome","to","CC32xx"
-           ,"development !\n"};
-   ul_2 =0;
+  unsigned long ul_2;
+  const portCHAR *pcInterruptMessage[4] = {"Welcome","to","CC32xx"
+          ,"development !\n"};
+  UART_PRINT("Task 2\n\r");
+  GPIO_IF_LedOff(MCU_ALL_LED_IND);
+  ul_2 =0;
       
-   for( ;; )
-     {
-       /* Queue a message for the print task to display on the UART CONSOLE. */
-      xQueueSend( xPrintQueue, &pcInterruptMessage[ul_2 % 4], portMAX_DELAY );
-      ul_2++;
-      MAP_UtilsDelay(2000000);
-     }
+  for( ;; )
+  {
+    /* Queue a message for the print task to display on the UART CONSOLE. */
+    xQueueSend( xPrintQueue, &pcInterruptMessage[ul_2 % 4], portMAX_DELAY );
+    ul_2++;
+    MAP_UtilsDelay(2000000);
+
+    GPIO_IF_LedToggle(MCU_RED_LED_GPIO);
+  }
 }
 
 //*****************************************************************************
@@ -263,12 +279,11 @@ void vTestTask2( void *pvParameters )
 static void
 DisplayBanner(char * AppName)
 {
-
-    Report("\n\n\n\r");
-    Report("\t\t *************************************************\n\r");
-    Report("\t\t    CC3200 %s Application       \n\r", AppName);
-    Report("\t\t *************************************************\n\r");
-    Report("\n\n\n\r");
+  Report("\n\n\n\r");
+  Report("\t\t *************************************************\n\r");
+  Report("\t\t    CC3200 %s Application       \n\r", AppName);
+  Report("\t\t *************************************************\n\r");
+  Report("\n\n\n\r");
 }
 
 //*****************************************************************************
@@ -283,16 +298,16 @@ DisplayBanner(char * AppName)
 static void
 BoardInit(void)
 {
-/* In case of TI-RTOS vector table is initialize by OS itself */
+  /* In case of TI-RTOS vector table is initialize by OS itself */
 #ifndef USE_TIRTOS
   //
   // Set vector table base
   //
 #if defined(ccs) || defined(gcc)
-    MAP_IntVTableBaseSet((unsigned long)&g_pfnVectors[0]);
+  MAP_IntVTableBaseSet((unsigned long)&g_pfnVectors[0]);
 #endif
 #if defined(ewarm)
-    MAP_IntVTableBaseSet((unsigned long)&__vector_table);
+  MAP_IntVTableBaseSet((unsigned long)&__vector_table);
 #endif
 #endif
   //

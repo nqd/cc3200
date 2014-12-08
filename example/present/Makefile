@@ -100,6 +100,7 @@ ${BINDIR}:
 ${BINDIR}/present.axf: ${OBJDIR}/main.o
 ${BINDIR}/present.axf: ${OBJDIR}/pinmux.o
 ${BINDIR}/present.axf: ${OBJDIR}/uart_if.o
+${BINDIR}/present.axf: ${OBJDIR}/gpio_if.o
 ${BINDIR}/present.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/present.axf: ${ROOT}/driverlib/${COMPILER}/${BINDIR}/libdriver.a
 ${BINDIR}/present.axf: ${ROOT}/oslib/${COMPILER}/${BINDIR}/FreeRTOS.a
