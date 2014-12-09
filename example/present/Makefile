@@ -50,8 +50,8 @@ include ${ROOT}/tools/gcc_scripts/makedefs
 # Where to find source files that do not live in this directory.
 #
 VPATH=./
-VPATH+=../drivers
-VPATH+=../common
+VPATH+=${ROOT}/driverlib
+VPATH+=${ROOT}/example/common
 
 #
 # Additional Compiler Flags
@@ -61,15 +61,15 @@ CFLAGS+=-DUSE_FREERTOS
 #
 # Where to find header files that do not live in the source directory.
 #
-IPATH=..
-IPATH+=../common
-IPATH+=../../inc
-IPATH+=../../oslib
-IPATH+=../../driverlib
-IPATH+=../../third_party/FreeRTOS
-IPATH+=../../third_party/FreeRTOS/source
-IPATH+=../../third_party/FreeRTOS/source/portable/GCC/ARM_CM4
-IPATH+=../../third_party/FreeRTOS/source/include
+IPATH=./
+IPATH+=${ROOT}/example/common
+IPATH+=${ROOT}/inc
+IPATH+=${ROOT}/oslib
+IPATH+=${ROOT}/driverlib
+IPATH+=${ROOT}/third_party/FreeRTOS
+IPATH+=${ROOT}/third_party/FreeRTOS/source
+IPATH+=${ROOT}/third_party/FreeRTOS/source/portable/GCC/ARM_CM4
+IPATH+=${ROOT}/third_party/FreeRTOS/source/include
 
 #
 # The default rule, which causes the driver library to be built.
