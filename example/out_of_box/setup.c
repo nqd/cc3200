@@ -16,7 +16,9 @@
 #include "prcm.h"
 #include "pin.h"
 
+// App Includes
 #include "setup.h"
+#include "pinmux.h"
 
 #if defined(ccs) || defined(gcc)
 extern void (* const g_pfnVectors[])(void);
@@ -24,6 +26,32 @@ extern void (* const g_pfnVectors[])(void);
 #if defined(ewarm)
 extern uVectorEntry __vector_table;
 #endif
+
+// TODO: write this function
+void ConfigureGPIO(void)
+{
+    // // Initialize the LED pins
+    // GPIO_IF_LedConfigure(0xff);
+
+    // // Set Interrupt Type for GPIO buttons
+    // GPIOIntTypeSet(LEFT_BUTTON_PORT, LEFT_BUTTON, GPIO_BOTH_EDGES);
+    // GPIOIntTypeSet(RIGHT_BUTTON_PORT, RIGHT_BUTTON, GPIO_BOTH_EDGES);
+
+    // // Register Interrupt handlers
+    // IntRegister(17, button_handler);
+    // IntPrioritySet(17, 1);
+    // IntEnable(17);
+    // IntRegister(18, button_handler);
+    // IntPrioritySet(18, 1);
+    // IntEnable(18);
+
+    // // Enable Interrupts
+    // GPIOIntClear(GPIOA1_BASE,GPIO_PIN_5);
+    // GPIOIntEnable(GPIOA1_BASE,GPIO_INT_PIN_5);
+
+    // GPIOIntClear(GPIOA2_BASE,GPIO_PIN_6);
+    // GPIOIntEnable(GPIOA2_BASE,GPIO_INT_PIN_6);
+}
 
 //*****************************************************************************
 //
@@ -77,4 +105,28 @@ BoardInit(void)
     MAP_IntEnable(FAULT_SYSTICK);
 
     PRCMCC3200MCUInit();
+}
+
+void doSetup(void)
+{
+    //
+    // Board Initilization
+    //
+    BoardInit();
+    
+    //
+    // Configure the pinmux settings for the peripherals exercised
+    //
+    PinMuxConfig();
+
+    PinConfigSet(PIN_58,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
+    
+    //
+    // UART Init
+    //
+    InitTerm();
+    
+    DisplayBanner(APP_NAME);
+
+    ConfigureGPIO();
 }

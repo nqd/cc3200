@@ -76,8 +76,6 @@
 #include "wlan_if.h"
 #include "setup.h"
 
-#define APPLICATION_VERSION              "1.1.0"
-#define APP_NAME                         "Out of Box"
 #define OOB_TASK_PRIORITY                1
 #define SPAWN_TASK_PRIORITY              9
 #define OSI_STACK_SIZE                   2048
@@ -307,36 +305,8 @@ void main()
 {
     long   lRetVal = -1;
 
-    //
-    // Board Initilization
-    //
-    BoardInit();
-    
-    //
-    // Configure the pinmux settings for the peripherals exercised
-    //
-    PinMuxConfig();
+    doSetup();
 
-    PinConfigSet(PIN_58,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
-
-    // Initialize Global Variables
-    InitializeAppVariables();
-    
-    //
-    // UART Init
-    //
-    InitTerm();
-    
-    DisplayBanner(APP_NAME);
-
-    //
-    // LED Init
-    //
-    GPIO_IF_LedConfigure(LED1);
-      
-    //Turn Off the LEDs
-    GPIO_IF_LedOff(MCU_RED_LED_GPIO);
-       
     //
     // I2C Init
     //
