@@ -28,16 +28,16 @@ CFLAGS+=-DUSE_FREERTOS
 IPATH=..
 IPATH+=../..
 IPATH+=../../common
-IPATH+=../../../inc
-IPATH+=../../../oslib
-IPATH+=../../../driverlib
-IPATH+=../../../simplelink
-IPATH+=../../../simplelink/source
-IPATH+=../../../simplelink/include
-IPATH+=../../../third_party/FreeRTOS
-IPATH+=../../../third_party/FreeRTOS/source
-IPATH+=../../../third_party/FreeRTOS/source/portable/GCC/ARM_CM4
-IPATH+=../../../third_party/FreeRTOS/source/include
+IPATH+=${ROOT}/inc
+IPATH+=${ROOT}/oslib
+IPATH+=${ROOT}/driverlib
+IPATH+=${ROOT}/simplelink
+IPATH+=${ROOT}/simplelink/source
+IPATH+=${ROOT}/simplelink/include
+IPATH+=${ROOT}/third_party/FreeRTOS
+IPATH+=${ROOT}/third_party/FreeRTOS/source
+IPATH+=${ROOT}/third_party/FreeRTOS/source/portable/GCC/ARM_CM4
+IPATH+=${ROOT}/third_party/FreeRTOS/source/include
 
 #
 # The default rule, which causes the driver library to be built.
@@ -68,6 +68,7 @@ ${BINDIR}:
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/bma222drv.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/device_status.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/i2c_if.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/wlan_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/main.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/pinmux.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/smartconfig.o
