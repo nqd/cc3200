@@ -75,6 +75,7 @@ ${BINDIR}/out_of_box.axf: ${OBJDIR}/smartconfig.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/gpio_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/tmp006drv.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/uart_if.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/freertos_handle.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/out_of_box.axf: ${ROOT}/simplelink/${COMPILER}/${BINDIR}/libsimplelink.a
 ${BINDIR}/out_of_box.axf: ${ROOT}/driverlib/${COMPILER}/${BINDIR}/libdriver.a
