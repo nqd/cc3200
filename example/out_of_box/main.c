@@ -36,33 +36,8 @@
 //*****************************************************************************
 //
 // Application Name     - Out of Box
-// Application Overview - This Application demonstrates Out of Box Experience 
-//                        with CC32xx Launch Pad. It highlights the following 
-//                        features:
-//                     1. Easy Connection to CC3200 Launchpad
-//                        - Direct Connection to LP by using CC3200 device in
-//                          Access Point Mode(Default)
-//                        - Connection using TI SmartConfigTechnology
-//                     2. Easy access to CC3200 Using Internal HTTP server and 
-//                        on-board webcontent
-//                     3. Attractive Demos
-//                        - Home Automation
-//                        - Appliance Control
-//                        - Security System
-//                        - Thermostat
-// Application Details  -
-// http://processors.wiki.ti.com/index.php/CC32xx_Out_of_Box_Application
-// or
-// docs\examples\CC32xx_Out_of_Box_Application.pdf
 //
 //*****************************************************************************
-
-//****************************************************************************
-//
-//! \addtogroup oob
-//! @{
-//
-//****************************************************************************
 
 // Standard includes
 #include <stdlib.h>
@@ -134,7 +109,7 @@ static unsigned char  g_ucConnectionSSID[SSID_LEN_MAX+1]; //Connection SSID
 static unsigned char  g_ucConnectionBSSID[BSSID_LEN_MAX]; //Connection BSSID
 
 
-#if defined(ccs)
+#if defined(ccs) || defined(gcc)
 extern void (* const g_pfnVectors[])(void);
 #endif
 #if defined(ewarm)
@@ -353,6 +328,7 @@ void ReadAccSensor()
 //*****************************************************************************
 void SimpleLinkWlanEventHandler(SlWlanEvent_t *pWlanEvent)
 {
+    UART_PRINT("%d\n\r", __LINE__);
     if(pWlanEvent == NULL)
     {
         UART_PRINT("Null pointer\n\r");
@@ -850,12 +826,15 @@ long ConnectToNetwork()
     unsigned int uiConnectTimeoutCnt =0;
 
     // staring simplelink
+    UART_PRINT("\t\tStarting SimpleLink...\n\r");
     lRetVal =  sl_Start(NULL,NULL,NULL);
+    UART_PRINT("\t\tDone!\n\r");
     ASSERT_ON_ERROR( lRetVal);
 
     // Device is in AP Mode and Force AP Jumper is not Connected
     if(ROLE_STA != lRetVal && g_uiDeviceModeConfig == ROLE_STA )
     {
+        UART_PRINT("\t\tDevice is in AP Mode and Force AP Jumper is not Connected\n\r");
         if (ROLE_AP == lRetVal)
         {
             // If the device is in AP mode, we need to wait for this event 
@@ -875,6 +854,9 @@ long ConnectToNetwork()
     //Device is in STA Mode and Force AP Jumper is Connected
     if(ROLE_AP != lRetVal && g_uiDeviceModeConfig == ROLE_AP )
     {
+         UART_PRINT("\t\tDevice is in STA Mode and Force AP Jumper is Connected\n\r");
+         //Switch to AP Mode
+         UART_PRINT("\t\tSwitch to AP Mode\n\r");
          //Switch to AP Mode
          lRetVal = ConfigureMode(ROLE_AP);
          ASSERT_ON_ERROR( lRetVal);
@@ -884,9 +866,11 @@ long ConnectToNetwork()
     //No Mode Change Required
     if(lRetVal == ROLE_AP)
     {
+        UART_PRINT("\t\tNo Mode Change Required (ROLE_AP)\n\r");
         //waiting for the AP to acquire IP address from Internal DHCP Server
         // If the device is in AP mode, we need to wait for this event 
         // before doing anything 
+        UART_PRINT("\t\tWaiting for IP...\n\r");
         while(!IS_IP_ACQUIRED(g_ulStatus))
         {
         #ifndef SL_PLATFORM_MULTI_THREADED
@@ -923,6 +907,7 @@ long ConnectToNetwork()
     }
     else
     {
+        UART_PRINT("\t\tNo Mode Change Required (ROLE_STA)\n\r");
         //Stop Internal HTTP Server
         lRetVal = sl_NetAppStop(SL_NET_APP_HTTP_SERVER_ID);
         ASSERT_ON_ERROR( lRetVal);
@@ -932,6 +917,7 @@ long ConnectToNetwork()
         ASSERT_ON_ERROR( lRetVal);
 
     	//waiting for the device to Auto Connect
+        UART_PRINT("\t\twaiting for the device to Auto Connect\n\r");
         while(uiConnectTimeoutCnt<AUTO_CONNECTION_TIMEOUT_COUNT &&
             ((!IS_CONNECTED(g_ulStatus)) || (!IS_IP_ACQUIRED(g_ulStatus)))) 
         {
@@ -948,25 +934,31 @@ long ConnectToNetwork()
         //Couldn't connect Using Auto Profile
         if(uiConnectTimeoutCnt == AUTO_CONNECTION_TIMEOUT_COUNT)
         {
+            UART_PRINT("\t\t\tCouldn't connect Using Auto Profile\n\r");
             //Blink Red LED to Indicate Connection Error
             GPIO_IF_LedOn(MCU_RED_LED_GPIO);
             
             CLR_STATUS_BIT_ALL(g_ulStatus);
 
             //Connect Using Smart Config
+            UART_PRINT("\t\t\tConnect Using Smart Config\n\r");
             lRetVal = SmartConfigConnect();
             ASSERT_ON_ERROR(lRetVal);
 
             //Waiting for the device to Auto Connect
+            UART_PRINT("\t\t\tWaiting for the device to Auto Connect\n\r");
             while((!IS_CONNECTED(g_ulStatus)) || (!IS_IP_ACQUIRED(g_ulStatus)))
             {
                 MAP_UtilsDelay(500);              
             }
-    }
-    //Turn RED LED Off
-    GPIO_IF_LedOff(MCU_RED_LED_GPIO);
+            UART_PRINT("\t\t\tDone!\n\r");
+        }
+        //Turn RED LED Off
+        GPIO_IF_LedOff(MCU_RED_LED_GPIO);
 
-    g_iInternetAccess = ConnectionTest();
+        UART_PRINT("\t\tTesting connection...\n\r");
+        g_iInternetAccess = ConnectionTest();
+        UART_PRINT("\t\tDone (%d)\n\r", g_iInternetAccess);
 
     }
     return SUCCESS;
@@ -1019,10 +1011,14 @@ static void OOBTask(void *pvParameters)
     long   lRetVal = -1;
 
     //Read Device Mode Configuration
+    UART_PRINT("\tReading device configuration...\n\r");
     ReadDeviceConfiguration();
+    UART_PRINT("\tDone!\n\r");
 
     //Connect to Network
+    UART_PRINT("\tConnecting to network...\n\r");
     lRetVal = ConnectToNetwork();
+    UART_PRINT("\tDone!\n\r");
     if(lRetVal < 0)
     {
         ERR_PRINT(lRetVal);
@@ -1084,12 +1080,12 @@ DisplayBanner(char * AppName)
 static void
 BoardInit(void)
 {
-/* In case of TI-RTOS vector table is initialize by OS itself */
+    /* In case of TI-RTOS vector table is initialize by OS itself */
 #ifndef USE_TIRTOS
     //
     // Set vector table base
     //
-#if defined(ccs)
+#if defined(ccs) || defined(gcc)
     MAP_IntVTableBaseSet((unsigned long)&g_pfnVectors[0]);
 #endif  //ccs
 #if defined(ewarm)
@@ -1173,6 +1169,7 @@ void main()
     //
     // Simplelinkspawntask
     //
+    UART_PRINT("Spawning tasks...\n\r");
     lRetVal = VStartSimpleLinkSpawnTask(SPAWN_TASK_PRIORITY);
     if(lRetVal < 0)
     {
@@ -1183,6 +1180,7 @@ void main()
     //
     // Create OOB Task
     //
+    UART_PRINT("Creating OOB task...\n\r");
     lRetVal = osi_TaskCreate(OOBTask, (signed char*)"OOBTask", \
                                 OSI_STACK_SIZE, NULL, \
                                 OOB_TASK_PRIORITY, NULL );
@@ -1195,6 +1193,7 @@ void main()
     //
     // Start OS Scheduler
     //
+    UART_PRINT("Starting OS scheduler...\n\r");
     osi_start();
 
     while (1)
