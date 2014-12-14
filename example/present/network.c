@@ -1,8 +1,13 @@
-// Simplelink includes
-#include "simplelink.h"
-
 #include "network.h"
+#include "common.h"
+#include "simplelink.h"
+#include "rom_map.h"
+#include "utils.h"
 
+unsigned long  g_ulStatus = 0;//SimpleLink Status
+unsigned long  g_ulGatewayIP = 0; //Network Gateway IP address
+unsigned char  g_ucConnectionSSID[SSID_LEN_MAX+1]; //Connection SSID
+unsigned char  g_ucConnectionBSSID[BSSID_LEN_MAX]; //Connection BSSID
 
 //*****************************************************************************
 //
@@ -64,7 +69,7 @@ int SmartConfigConnect()
      //
      // Turn ON the RED LED to indicate connection success
      //
-     GPIO_IF_LedOn(MCU_RED_LED_GPIO);
+     // GPIO_IF_LedOn(MCU_RED_LED_GPIO);
      //wait for few moments
      MAP_UtilsDelay(80000000);
      //reset to default AUTO policy

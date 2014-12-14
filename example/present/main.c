@@ -23,8 +23,11 @@
 //*****************************************************************************
 
 // Standard includes. 
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdlib.h>
+
+// simplelink
+#include "simplelink.h"
 
 // Free-RTOS includes
 #include "FreeRTOS.h"
@@ -52,6 +55,8 @@
 #include "gpio_if.h"
 
 #include "pinmux.h"
+
+#include "network.h"
 
 //*****************************************************************************
 //                      MACRO DEFINITIONS
@@ -322,6 +327,14 @@ int main( void )
     // Diasplay Banner
     //
     DisplayBanner(APP_NAME);
+
+    long lRetVal = -1;
+    //Start simplelink
+    lRetVal = sl_Start(0,0,0);
+    if (lRetVal < 0 || ROLE_STA != lRetVal) {
+      UART_PRINT("Failed to start the device \n\r");
+      // LOOP_FOREVER();
+    }
 
     //
     // Creating a queue for 10 elements.

@@ -56,6 +56,7 @@ VPATH+=${ROOT}/example/common
 #
 # Additional Compiler Flags
 #
+CFLAGS+=-DSL_PLATFORM_MULTI_THREADED
 CFLAGS+=-DUSE_FREERTOS
 
 #
@@ -107,6 +108,7 @@ ${BINDIR}/present.axf: ${OBJDIR}/uart_if.o
 ${BINDIR}/present.axf: ${OBJDIR}/network.o
 ${BINDIR}/present.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/present.axf: ${ROOT}/driverlib/${COMPILER}/${BINDIR}/libdriver.a
+${BINDIR}/present.axf: ${ROOT}/simplelink/${COMPILER}/${BINDIR}/libsimplelink.a
 ${BINDIR}/present.axf: ${ROOT}/oslib/${COMPILER}/${BINDIR}/FreeRTOS.a
 SCATTERgcc_present=present.ld
 ENTRY_present=ResetISR
