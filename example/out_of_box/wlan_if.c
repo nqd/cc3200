@@ -3,6 +3,10 @@
 #include "simplelink.h"
 #include "netcfg.h"
 
+// Driver lib
+#include "rom_map.h"
+#include "utils.h"
+
 // Common interface includes
 #include "gpio_if.h"
 #include "uart_if.h"
@@ -13,7 +17,7 @@
 #include "device_status.h"
 #include "wlan_if.h"
 
-#define SH_GPIO_3           3       /* P58 - Device Mode */
+#define SH_GPIO_3                       3       /* P58 - Device Mode */
 #define AUTO_CONNECTION_TIMEOUT_COUNT   50      /* 5 Sec */
 
 // GLOBAL VARIABLES
@@ -59,7 +63,7 @@ static int ConfigureMode(int iMode)
 //!            -1 - Failure
 //
 //****************************************************************************
-static long ConnectToNetwork()
+long ConnectToNetwork()
 {
     long lRetVal = -1;
     unsigned int uiConnectTimeoutCnt =0;
@@ -212,7 +216,7 @@ static long ConnectToNetwork()
 //! \return                        None
 //
 //****************************************************************************
-static void ReadDeviceConfiguration()
+void ReadDeviceConfiguration()
 {
     unsigned int uiGPIOPort;
     unsigned char pucGPIOPin;
