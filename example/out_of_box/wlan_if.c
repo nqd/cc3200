@@ -142,11 +142,11 @@ long ConnectToNetwork()
            osi_Sleep(400);
        }
 
-       char ssid[32];
-     unsigned short len = 32;
-     unsigned short config_opt = WLAN_AP_OPT_SSID;
-     sl_WlanGet(SL_WLAN_CFG_AP_ID, &config_opt , &len, (unsigned char* )ssid);
-     UART_PRINT("\n\r Connect to : \'%s\'\n\r\n\r",ssid);
+        char ssid[32];
+        unsigned short len = 32;
+        unsigned short config_opt = WLAN_AP_OPT_SSID;
+        sl_WlanGet(SL_WLAN_CFG_AP_ID, &config_opt , &len, (unsigned char* )ssid);
+        UART_PRINT("\n\r Connect to : \'%s\'\n\r\n\r",ssid);
     }
     else
     {
@@ -237,7 +237,6 @@ void ReadDeviceConfiguration()
         //STA Mode
         g_uiDeviceModeConfig = ROLE_STA;
     }
-
 }
 
 //*****************************************************************************

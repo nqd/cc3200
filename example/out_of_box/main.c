@@ -74,6 +74,7 @@
 #include "bma222drv.h"
 #include "pinmux.h"
 #include "wlan_if.h"
+#include "setup.h"
 
 #define APPLICATION_VERSION              "1.1.0"
 #define APP_NAME                         "Out of Box"
@@ -102,12 +103,6 @@ static unsigned char g_ucDryerRunning = 0;
 static unsigned char g_ucLEDStatus = LED_OFF;
 
 
-#if defined(ccs) || defined(gcc)
-extern void (* const g_pfnVectors[])(void);
-#endif
-#if defined(ewarm)
-extern uVectorEntry __vector_table;
-#endif
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- End
 //*****************************************************************************
@@ -304,59 +299,6 @@ static void OOBTask(void *pvParameters)
     }
 }
 
-//*****************************************************************************
-//
-//! Application startup display on UART
-//!
-//! \param  none
-//!
-//! \return none
-//!
-//*****************************************************************************
-static void
-DisplayBanner(char * AppName)
-{
-    UART_PRINT("\n\n\n\r");
-    UART_PRINT("\t\t *************************************************\n\r");
-    UART_PRINT("\t\t     CC3200 %s Application       \n\r", AppName);
-    UART_PRINT("\t\t *************************************************\n\r");
-    UART_PRINT("\n\n\n\r");
-}
-
-//*****************************************************************************
-//
-//! Board Initialization & Configuration
-//!
-//! \param  None
-//!
-//! \return None
-//
-//*****************************************************************************
-static void
-BoardInit(void)
-{
-    /* In case of TI-RTOS vector table is initialize by OS itself */
-#ifndef USE_TIRTOS
-    //
-    // Set vector table base
-    //
-#if defined(ccs) || defined(gcc)
-    MAP_IntVTableBaseSet((unsigned long)&g_pfnVectors[0]);
-#endif  //ccs
-#if defined(ewarm)
-    MAP_IntVTableBaseSet((unsigned long)&__vector_table);
-#endif  //ewarm
-    
-#endif  //USE_TIRTOS
-    
-    //
-    // Enable Processor
-    //
-    MAP_IntMasterEnable();
-    MAP_IntEnable(FAULT_SYSTICK);
-
-    PRCMCC3200MCUInit();
-}
 
 //****************************************************************************
 //                            MAIN FUNCTION
@@ -453,7 +395,6 @@ void main()
 
     while (1)
     {
-
     }
 
 }
