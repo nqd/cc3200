@@ -307,6 +307,7 @@ void main()
 
     doSetup();
 
+    // TODO: move sensor to other file
     //
     // I2C Init
     //
