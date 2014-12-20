@@ -70,8 +70,8 @@
 
 // App Includes
 #include "smartconfig.h"
-#include "tmp006drv.h"
-#include "bma222drv.h"
+// #include "tmp006drv.h"
+// #include "bma222drv.h"
 #include "pinmux.h"
 #include "wlan_if.h"
 #include "setup.h"
@@ -289,37 +289,10 @@ static void OOBTask(void *pvParameters)
 //****************************************************************************
 void main()
 {
-    long   lRetVal = -1;
+    long lRetVal = -1;
 
     doSetup();
 
-    // TODO: move sensor to other file
-    //
-    // I2C Init
-    //
-    lRetVal = I2C_IF_Open(I2C_MASTER_MODE_FST);
-    if(lRetVal < 0)
-    {
-        ERR_PRINT(lRetVal);
-        LOOP_FOREVER();
-    }    
-
-    //Init Temprature Sensor
-    lRetVal = TMP006DrvOpen();
-    if(lRetVal < 0)
-    {
-        ERR_PRINT(lRetVal);
-        LOOP_FOREVER();
-    }    
-
-    //Init Accelerometer Sensor
-    lRetVal = BMA222Open();
-    if(lRetVal < 0)
-    {
-        ERR_PRINT(lRetVal);
-        LOOP_FOREVER();
-    }    
-    
     //
     // Simplelinkspawntask
     //

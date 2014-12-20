@@ -5,6 +5,7 @@
 // Common interface includes
 #include "gpio_if.h"
 #include "uart_if.h"
+#include "i2c_if.h"
 #include "common.h"
 
 // Driverlib includes
@@ -19,6 +20,8 @@
 // App Includes
 #include "setup.h"
 #include "pinmux.h"
+#include "tmp006drv.h"
+#include "bma222drv.h"
 
 #if defined(ccs) || defined(gcc)
 extern void (* const g_pfnVectors[])(void);
@@ -131,4 +134,24 @@ void doSetup(void)
     DisplayBanner(APP_NAME);
 
     ConfigureGPIO();
+
+    //
+    // I2C Init
+    //
+    if(I2C_IF_Open(I2C_MASTER_MODE_FST) < 0)
+    {
+        UART_PRINT("I2C cannot be opened\n\r");
+    }
+
+    //Init Temprature Sensor
+    if(TMP006DrvOpen() < 0)
+    {
+        UART_PRINT("TMP006 cannot be opened\n\r");
+    }
+
+    //Init Accelerometer Sensor
+    if(BMA222Open() < 0)
+    {
+        UART_PRINT("BMA222 cannot be opened\n\r");
+    }
 }
