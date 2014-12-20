@@ -70,7 +70,7 @@
 
 // App Includes
 #include "smartconfig.h"
-// #include "tmp006drv.h"
+#include "tmp006drv.h"
 // #include "bma222drv.h"
 #include "pinmux.h"
 #include "wlan_if.h"
@@ -169,57 +169,57 @@ static unsigned short itoa(char cNum, char *cString)
 //!
 //
 //*****************************************************************************
-void ReadAccSensor()
-{
-    //Define Accelerometer Threshold to Detect Movement
-    const short csAccThreshold    = 5;
+// void ReadAccSensor()
+// {
+//     //Define Accelerometer Threshold to Detect Movement
+//     const short csAccThreshold    = 5;
 
-    signed char cAccXT1,cAccYT1,cAccZT1;
-    signed char cAccXT2,cAccYT2,cAccZT2;
-    signed short sDelAccX, sDelAccY, sDelAccZ;
-    int iRet = -1;
-    int iCount = 0;
+//     signed char cAccXT1,cAccYT1,cAccZT1;
+//     signed char cAccXT2,cAccYT2,cAccZT2;
+//     signed short sDelAccX, sDelAccY, sDelAccZ;
+//     int iRet = -1;
+//     int iCount = 0;
       
-    iRet = BMA222ReadNew(&cAccXT1, &cAccYT1, &cAccZT1);
-    if(iRet)
-    {
-        //In case of error/ No New Data return
-        return;
-    }
-    for(iCount=0;iCount<2;iCount++)
-    {
-        MAP_UtilsDelay((90*80*1000)); //30msec
-        iRet = BMA222ReadNew(&cAccXT2, &cAccYT2, &cAccZT2);
-        if(iRet)
-        {
-            //In case of error/ No New Data continue
-            iRet = 0;
-            continue;
-        }
+//     iRet = BMA222ReadNew(&cAccXT1, &cAccYT1, &cAccZT1);
+//     if(iRet)
+//     {
+//         //In case of error/ No New Data return
+//         return;
+//     }
+//     for(iCount=0;iCount<2;iCount++)
+//     {
+//         MAP_UtilsDelay((90*80*1000)); //30msec
+//         iRet = BMA222ReadNew(&cAccXT2, &cAccYT2, &cAccZT2);
+//         if(iRet)
+//         {
+//             //In case of error/ No New Data continue
+//             iRet = 0;
+//             continue;
+//         }
 
-        else
-        {                       
-            sDelAccX = abs((signed short)cAccXT2 - (signed short)cAccXT1);
-            sDelAccY = abs((signed short)cAccYT2 - (signed short)cAccYT1);
-            sDelAccZ = abs((signed short)cAccZT2 - (signed short)cAccZT1);
+//         else
+//         {                       
+//             sDelAccX = abs((signed short)cAccXT2 - (signed short)cAccXT1);
+//             sDelAccY = abs((signed short)cAccYT2 - (signed short)cAccYT1);
+//             sDelAccZ = abs((signed short)cAccZT2 - (signed short)cAccZT1);
 
-            //Compare with Pre defined Threshold
-            if(sDelAccX > csAccThreshold || sDelAccY > csAccThreshold ||
-               sDelAccZ > csAccThreshold)
-            {
-                //Device Movement Detected, Break and Return
-                g_ucDryerRunning = 1;
-                break;
-            }
-            else
-            {
-                //Device Movement Static
-                g_ucDryerRunning = 0;
-            }
-        }
-    }
+//             //Compare with Pre defined Threshold
+//             if(sDelAccX > csAccThreshold || sDelAccY > csAccThreshold ||
+//                sDelAccZ > csAccThreshold)
+//             {
+//                 //Device Movement Detected, Break and Return
+//                 g_ucDryerRunning = 1;
+//                 break;
+//             }
+//             else
+//             {
+//                 //Device Movement Static
+//                 g_ucDryerRunning = 0;
+//             }
+//         }
+//     }
        
-}
+// }
 
 
 //*****************************************************************************
@@ -280,6 +280,12 @@ static void OOBTask(void *pvParameters)
         GPIO_IF_LedOn(MCU_RED_LED_GPIO);
         osi_Sleep(1000);
         GPIO_IF_LedOff(MCU_RED_LED_GPIO);
+
+        // read temp
+        float fCurrentTemp;
+        TMP006DrvGetTemp(&fCurrentTemp);
+        char cTemp = (char)fCurrentTemp;
+        UART_PRINT("TMP006 Temp = %dF\n\r", cTemp);
     }
 }
 
