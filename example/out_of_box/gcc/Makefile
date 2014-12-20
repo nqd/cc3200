@@ -48,8 +48,8 @@ all: ${BINDIR}/out_of_box.axf
 #
 # Debug with arm-none-eabi-gdb
 # 
-debug:
-	@arm-none-eabi-gdb -x ${ROOT}/tools/gcc_scripts/gdbinit ${BINDIR}/out_of_box.axf
+# debug:
+	# @arm-none-eabi-gdb -x ${ROOT}/tools/gcc_scripts/gdbinit ./${BINDIR}/out_of_box.axf
 	
 #
 # The rule to clean out all the build products.

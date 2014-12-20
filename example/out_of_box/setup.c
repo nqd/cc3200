@@ -30,14 +30,16 @@ extern uVectorEntry __vector_table;
 // TODO: write this function
 void ConfigureGPIO(void)
 {
-    // // Initialize the LED pins
+    // Initialize the LED pins
     // GPIO_IF_LedConfigure(0xff);
+    GPIO_IF_LedConfigure(LED1);
+    GPIO_IF_LedOff(MCU_RED_LED_GPIO);
 
-    // // Set Interrupt Type for GPIO buttons
+    // Set Interrupt Type for GPIO buttons
     // GPIOIntTypeSet(LEFT_BUTTON_PORT, LEFT_BUTTON, GPIO_BOTH_EDGES);
     // GPIOIntTypeSet(RIGHT_BUTTON_PORT, RIGHT_BUTTON, GPIO_BOTH_EDGES);
 
-    // // Register Interrupt handlers
+    // Register Interrupt handlers
     // IntRegister(17, button_handler);
     // IntPrioritySet(17, 1);
     // IntEnable(17);
@@ -45,7 +47,7 @@ void ConfigureGPIO(void)
     // IntPrioritySet(18, 1);
     // IntEnable(18);
 
-    // // Enable Interrupts
+    // Enable Interrupts
     // GPIOIntClear(GPIOA1_BASE,GPIO_PIN_5);
     // GPIOIntEnable(GPIOA1_BASE,GPIO_INT_PIN_5);
 

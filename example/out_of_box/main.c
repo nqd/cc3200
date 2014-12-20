@@ -276,24 +276,10 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
-        //LED Actions
-        if(g_ucLEDStatus == LED_ON)
-        {
-            GPIO_IF_LedOn(MCU_RED_LED_GPIO);
-            osi_Sleep(500);
-        }
-        if(g_ucLEDStatus == LED_OFF)
-        {
-            GPIO_IF_LedOff(MCU_RED_LED_GPIO);
-            osi_Sleep(500);
-        }
-        if(g_ucLEDStatus==LED_BLINK)
-        {
-            GPIO_IF_LedOn(MCU_RED_LED_GPIO);
-            osi_Sleep(500);
-            GPIO_IF_LedOff(MCU_RED_LED_GPIO);
-            osi_Sleep(500);
-        }
+        osi_Sleep(1000);
+        GPIO_IF_LedOn(MCU_RED_LED_GPIO);
+        osi_Sleep(1000);
+        GPIO_IF_LedOff(MCU_RED_LED_GPIO);
     }
 }
 
