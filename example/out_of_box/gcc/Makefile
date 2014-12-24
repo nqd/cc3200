@@ -15,6 +15,7 @@ include ${ROOT}/tools/gcc_scripts/makedefs
 VPATH=..
 VPATH+=../../drivers
 VPATH+=../../common
+VPATH+=../mqtt
 
 #
 # Additional Compiler Flags
@@ -26,6 +27,7 @@ CFLAGS+=-DUSE_FREERTOS
 # Where to find header files that do not live in the source directory.
 #
 IPATH=..
+IPATH+=../mqtt
 IPATH+=../..
 IPATH+=../../common
 IPATH+=${ROOT}/inc
@@ -77,6 +79,17 @@ ${BINDIR}/out_of_box.axf: ${OBJDIR}/tmp006drv.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/uart_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/setup.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/freertos_handle.o
+
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTCC3200.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTClient.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTConnectClient.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTDeserializePublish.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTFormat.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTPacket.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTSerializePublish.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTSubscribeClient.o
+${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTUnsubscribeClient.o
+
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/out_of_box.axf: ${ROOT}/simplelink/${COMPILER}/${BINDIR}/libsimplelink.a
 ${BINDIR}/out_of_box.axf: ${ROOT}/driverlib/${COMPILER}/${BINDIR}/libdriver.a

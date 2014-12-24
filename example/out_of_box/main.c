@@ -75,6 +75,7 @@
 #include "pinmux.h"
 #include "wlan_if.h"
 #include "setup.h"
+#include "mqtt.h"
 
 #define OOB_TASK_PRIORITY                1
 #define SPAWN_TASK_PRIORITY              9
