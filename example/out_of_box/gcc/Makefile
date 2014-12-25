@@ -78,17 +78,18 @@ ${BINDIR}/out_of_box.axf: ${OBJDIR}/gpio_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/tmp006drv.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/uart_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/setup.o
+# ${BINDIR}/out_of_box.axf: ${OBJDIR}/mqtt.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/freertos_handle.o
 
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTCC3200.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTClient.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTConnectClient.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTDeserializePublish.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTFormat.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTPacket.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTSerializePublish.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTSubscribeClient.o
-${BINDIR}/mqtt_example.axf: ${OBJDIR}/MQTTUnsubscribeClient.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTCC3200.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTClient.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTConnectClient.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTDeserializePublish.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTFormat.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTPacket.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTSerializePublish.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTSubscribeClient.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTUnsubscribeClient.o
 
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/out_of_box.axf: ${ROOT}/simplelink/${COMPILER}/${BINDIR}/libsimplelink.a

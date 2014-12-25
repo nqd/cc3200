@@ -1,5 +1,13 @@
+#include "mqtt.h"
 #include "mqtt/MQTTClient.h"
 #include "osi.h"
+#include "uart_if.h"
+
+#define MQTT_TOPIC_LEDS "ticc3200/leds/#"
+#define MQTT_TOPIC_BUTTON1 "ticc3200/buttons/1"
+#define MQTT_TOPIC_BUTTON2 "ticc3200/buttons/2"
+#define DEVICE_STRING_SUB "ticc3200-sub"
+#define DEVICE_STRING_PUB "ticc3200-pub"
 
 //****************************************************************************
 //
