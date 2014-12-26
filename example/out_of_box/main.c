@@ -77,12 +77,6 @@
 #define AP_SSID_LEN_MAX                 32
 #define SL_STOP_TIMEOUT                 200
 
-typedef enum
-{
-  LED_OFF = 0,
-  LED_ON,
-  LED_BLINK
-} eLEDStatus;
 
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- Start
@@ -92,151 +86,12 @@ static unsigned char POST_token[] = "__SL_P_ULD";
 static unsigned char GET_token_TEMP[]  = "__SL_G_UTP";
 static unsigned char GET_token_ACC[]  = "__SL_G_UAC";
 static unsigned char GET_token_UIC[]  = "__SL_G_UIC";
-static unsigned char g_ucDryerRunning = 0;
-static unsigned char g_ucLEDStatus = LED_OFF;
 
 
+static int g_iNetworkConnection = -1;
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- End
 //*****************************************************************************
-
-
-//*****************************************************************************
-//
-//! itoa
-//!
-//!    @brief  Convert integer to ASCII in decimal base
-//!
-//!     @param  cNum is input integer number to convert
-//!     @param  cString is output string
-//!
-//!     @return number of ASCII parameters
-//!
-//!
-//
-//*****************************************************************************
-static unsigned short itoa(char cNum, char *cString)
-{
-    char* ptr;
-    char uTemp = cNum;
-    unsigned short length;
-
-    // value 0 is a special case
-    if (cNum == 0)
-    {
-        length = 1;
-        *cString = '0';
-
-        return length;
-    }
-
-    // Find out the length of the number, in decimal base
-    length = 0;
-    while (uTemp > 0)
-    {
-        uTemp /= 10;
-        length++;
-    }
-
-    // Do the actual formatting, right to left
-    uTemp = cNum;
-    ptr = cString + length;
-    while (uTemp > 0)
-    {
-        --ptr;
-        *ptr = pcDigits[uTemp % 10];
-        uTemp /= 10;
-    }
-
-    return length;
-}
-
-
-//*****************************************************************************
-//
-//! ReadAccSensor
-//!
-//!    @brief  Read Accelerometer Data from Sensor
-//!
-//!
-//!     @return none
-//!
-//!
-//
-//*****************************************************************************
-// void ReadAccSensor()
-// {
-//     //Define Accelerometer Threshold to Detect Movement
-//     const short csAccThreshold    = 5;
-
-//     signed char cAccXT1,cAccYT1,cAccZT1;
-//     signed char cAccXT2,cAccYT2,cAccZT2;
-//     signed short sDelAccX, sDelAccY, sDelAccZ;
-//     int iRet = -1;
-//     int iCount = 0;
-      
-//     iRet = BMA222ReadNew(&cAccXT1, &cAccYT1, &cAccZT1);
-//     if(iRet)
-//     {
-//         //In case of error/ No New Data return
-//         return;
-//     }
-//     for(iCount=0;iCount<2;iCount++)
-//     {
-//         MAP_UtilsDelay((90*80*1000)); //30msec
-//         iRet = BMA222ReadNew(&cAccXT2, &cAccYT2, &cAccZT2);
-//         if(iRet)
-//         {
-//             //In case of error/ No New Data continue
-//             iRet = 0;
-//             continue;
-//         }
-
-//         else
-//         {                       
-//             sDelAccX = abs((signed short)cAccXT2 - (signed short)cAccXT1);
-//             sDelAccY = abs((signed short)cAccYT2 - (signed short)cAccYT1);
-//             sDelAccZ = abs((signed short)cAccZT2 - (signed short)cAccZT1);
-
-//             //Compare with Pre defined Threshold
-//             if(sDelAccX > csAccThreshold || sDelAccY > csAccThreshold ||
-//                sDelAccZ > csAccThreshold)
-//             {
-//                 //Device Movement Detected, Break and Return
-//                 g_ucDryerRunning = 1;
-//                 break;
-//             }
-//             else
-//             {
-//                 //Device Movement Static
-//                 g_ucDryerRunning = 0;
-//             }
-//         }
-//     }
-       
-// }
-
-
-//*****************************************************************************
-//
-//! \brief This function initializes the application variables
-//!
-//! \param    None
-//!
-//! \return None
-//!
-//*****************************************************************************
-static void InitializeAppVariables()
-{
-    // g_ulStatus = 0;
-    // memset(g_ucConnectionSSID,0,sizeof(g_ucConnectionSSID));
-    // memset(g_ucConnectionBSSID,0,sizeof(g_ucConnectionBSSID));
-    // g_iInternetAccess = -1;
-    g_ucDryerRunning = 0;
-    // g_uiDeviceModeConfig = ROLE_STA; //default is STA mode
-    g_ucLEDStatus = LED_OFF;    
-}
-
 
 
 
@@ -267,6 +122,7 @@ static void OOBTask(void *pvParameters)
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
     }
+    g_iNetworkConnection = lRetVal;
 
     //Handle Async Events
     while(1)
@@ -281,6 +137,11 @@ static void OOBTask(void *pvParameters)
         TMP006DrvGetTemp(&fCurrentTemp);
         char cTemp = (char)fCurrentTemp;
         UART_PRINT("TMP006 Temp = %dF\n\r", cTemp);
+
+        // report with mqtt
+        // int rc = buttonNotify();
+        // if (rc < 0)
+        //     UART_PRINT("error in reporting with mqtt\n\r");
     }
 }
 
@@ -315,6 +176,8 @@ static void ButtonNotifyTask(void *pvParameters)
     unsigned char sw3_ucGPIOValue;
     unsigned char sw3_ucSent;
 
+    while (g_iNetworkConnection != 0) {};
+
     // Wait for a connection
     while (1) {
 
@@ -343,8 +206,8 @@ static void ButtonNotifyTask(void *pvParameters)
         while (1) {
             UART_PRINT("tick\n\r");
             sw3_ucGPIOValue = 1;
-            if (sw3_ucGPIOValue) {
-                if (!sw3_ucSent) {
+            sw3_ucSent = 0;
+
                     UART_PRINT("SW3\n\r");
                     sw3_ucSent = 1;
 
@@ -359,16 +222,13 @@ static void ButtonNotifyTask(void *pvParameters)
                     UART_PRINT("SW3, rc=%d\n\r", rc);
                     if (rc != 0)
                         break;
-                }
-            }
-            else {
-                sw3_ucSent = 0;
-            }
+                    
             rc = MQTTYield(&hMQTTClient, 10);
             if (rc != 0) {
                 UART_PRINT("rc = %d\n\r", rc);
                 break;
             }
+            UART_PRINT("done\n\r");
             osi_Sleep(5000);
         }
     }
@@ -407,9 +267,9 @@ void main()
     }
 
     //
-    // Create MQTT Task
+    // Create OOB Task
     //
-    UART_PRINT("Creating MQTT task...\n\r");
+    UART_PRINT("Creating ButtonNotifyTask task...\n\r");
     lRetVal = osi_TaskCreate(ButtonNotifyTask, (signed char*)"ButtonNotifyTask", \
                                 OSI_STACK_SIZE, NULL, \
                                 OOB_TASK_PRIORITY, NULL );
@@ -418,7 +278,6 @@ void main()
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
     }
-
     //
     // Start OS Scheduler
     //

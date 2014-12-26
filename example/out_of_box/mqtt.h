@@ -1,6 +1,6 @@
 #ifndef __MQTT__
 #define __MQTT__
 
-static void ButtonNotifyTask(void *pvParameters);
+int buttonNotify();
 
 #endif //  __MQTT__

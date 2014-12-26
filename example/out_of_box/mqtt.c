@@ -1,7 +1,10 @@
-#include "mqtt.h"
+// #include "mqtt.h"
 #include "mqtt/MQTTClient.h"
-#include "osi.h"
+#include "common.h"
+
+#include "gpio_if.h"
 #include "uart_if.h"
+#include "i2c_if.h"
 
 #define MQTT_TOPIC_LEDS "ticc3200/leds/#"
 #define MQTT_TOPIC_BUTTON1 "ticc3200/buttons/1"
@@ -18,7 +21,7 @@
 //! \return                        None
 //
 //****************************************************************************
-static void ButtonNotifyTask(void *pvParameters)
+int buttonNotify(void)
 {
     static unsigned int msg_id = 0;
     Network n;
@@ -27,22 +30,16 @@ static void ButtonNotifyTask(void *pvParameters)
     unsigned char buf[100];
     unsigned char readbuf[100];
 
-    unsigned char sw2_pinNum = 22;
-    unsigned char sw2_ucPin;
-    unsigned int sw2_uiGPIOPort;
-    unsigned char sw2_ucGPIOPin;
-    unsigned char sw2_ucGPIOValue;
-    unsigned char sw2_ucSent;
     
     unsigned char sw3_pinNum = 13;
     unsigned char sw3_ucPin;
     unsigned int sw3_uiGPIOPort;
     unsigned char sw3_ucGPIOPin;
     unsigned char sw3_ucGPIOValue;
-    unsigned char sw3_ucSent;
+    // unsigned char sw3_ucSent;
 
     // Wait for a connection
-    while (1) {
+    // while (1) {
 
         NewNetwork(&n);
         UART_PRINT("Connecting Socket\n\r");
@@ -66,13 +63,10 @@ static void ButtonNotifyTask(void *pvParameters)
         }
         UART_PRINT("\tsocket=%d\n\r", n.my_socket);
     
-        while (1) {
+        // while (1) {
             UART_PRINT("tick\n\r");
             sw3_ucGPIOValue = 1;
-            if (sw3_ucGPIOValue) {
-                if (!sw3_ucSent) {
                     UART_PRINT("SW3\n\r");
-                    sw3_ucSent = 1;
 
                     MQTTMessage msg;
                     msg.dup = 0;
@@ -81,22 +75,22 @@ static void ButtonNotifyTask(void *pvParameters)
                     msg.payloadlen = 7;
                     msg.qos = QOS0;
                     msg.retained = 0;
-                    int rc = MQTTPublish(&hMQTTClient, MQTT_TOPIC_BUTTON2, &msg);
+                    rc = MQTTPublish(&hMQTTClient, MQTT_TOPIC_BUTTON2, &msg);
                     UART_PRINT("SW3, rc=%d\n\r", rc);
                     if (rc != 0)
-                        break;
-                }
-            }
-            else {
-                sw3_ucSent = 0;
-            }
+                        return -1;
+
             rc = MQTTYield(&hMQTTClient, 10);
             if (rc != 0) {
                 UART_PRINT("rc = %d\n\r", rc);
-                break;
+                return -1;
             }
-            osi_Sleep(5000);
-        }
-    }
+
+            UART_PRINT("success\n\r");
+
+            return 0;
+            // osi_Sleep(5000);
+    //     }
+    // }
 }
 
