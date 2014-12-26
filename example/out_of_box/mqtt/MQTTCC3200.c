@@ -18,7 +18,7 @@
 
 unsigned long MilliTimer;
 
-void milliInterrupt(void) {
+void SysTickIntHandler(void) {
 	MilliTimer++;
 }
 
@@ -152,11 +152,11 @@ int TLSConnectNetwork(Network *n, char* addr, int port, SlSockSecureFiles_t* cer
 			return retVal;
 		}
 	}
-	/*
+
 	SysTickIntRegister(SysTickIntHandler);
 	SysTickPeriodSet(80000);
 	SysTickEnable();
-	*/
+
 	return retVal;
 }
 
@@ -187,10 +187,10 @@ int ConnectNetwork(Network* n, char* addr, int port)
 		sl_Close(n->my_socket);
 	    return retVal;
 	}
-	/*
+
 	SysTickIntRegister(SysTickIntHandler);
 	SysTickPeriodSet(80000);
 	SysTickEnable();
-	*/
+
 	return retVal;
 }
