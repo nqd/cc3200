@@ -86,8 +86,6 @@ int buttonNotify(void)
                 return -1;
             }
 
-            UART_PRINT("success\n\r");
-
             return 0;
             // osi_Sleep(5000);
     //     }

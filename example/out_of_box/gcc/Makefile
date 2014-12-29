@@ -78,7 +78,7 @@ ${BINDIR}/out_of_box.axf: ${OBJDIR}/gpio_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/tmp006drv.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/uart_if.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/setup.o
-# ${BINDIR}/out_of_box.axf: ${OBJDIR}/mqtt.o
+${BINDIR}/out_of_box.axf: ${OBJDIR}/mqtt.o
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/freertos_handle.o
 
 ${BINDIR}/out_of_box.axf: ${OBJDIR}/MQTTCC3200.o
