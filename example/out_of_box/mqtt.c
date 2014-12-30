@@ -29,21 +29,13 @@ int buttonNotify(void)
     int rc = 0;
     unsigned char buf[100];
     unsigned char readbuf[100];
-
     
-    unsigned char sw3_pinNum = 13;
-    unsigned char sw3_ucPin;
-    unsigned int sw3_uiGPIOPort;
-    unsigned char sw3_ucGPIOPin;
-    unsigned char sw3_ucGPIOValue;
-    // unsigned char sw3_ucSent;
 
     // Wait for a connection
     // while (1) {
 
         NewNetwork(&n);
         UART_PRINT("Connecting Socket\n\r");
-
         //Works - Unsecured
         rc = ConnectNetwork(&n, "test.mosquitto.org", 1883);
 
@@ -64,29 +56,30 @@ int buttonNotify(void)
         UART_PRINT("\tsocket=%d\n\r", n.my_socket);
     
         // while (1) {
-            UART_PRINT("tick\n\r");
-            sw3_ucGPIOValue = 1;
-                    UART_PRINT("SW3\n\r");
+        UART_PRINT("tick\n\r");
+        UART_PRINT("SW3\n\r");
 
-                    MQTTMessage msg;
-                    msg.dup = 0;
-                    msg.id = msg_id++;
-                    msg.payload = "pushed";
-                    msg.payloadlen = 7;
-                    msg.qos = QOS0;
-                    msg.retained = 0;
-                    rc = MQTTPublish(&hMQTTClient, MQTT_TOPIC_BUTTON2, &msg);
-                    UART_PRINT("SW3, rc=%d\n\r", rc);
-                    if (rc != 0)
-                        return -1;
+        MQTTMessage msg;
+        msg.dup = 0;
+        msg.id = msg_id++;
+        msg.payload = "pushed";
+        msg.payloadlen = 7;
+        msg.qos = QOS0;
+        msg.retained = 0;
+        rc = MQTTPublish(&hMQTTClient, MQTT_TOPIC_BUTTON2, &msg);
+        UART_PRINT("SW3, rc=%d\n\r", rc);
+        if (rc != 0)
+            return -1;
 
-            rc = MQTTYield(&hMQTTClient, 10);
-            if (rc != 0) {
-                UART_PRINT("rc = %d\n\r", rc);
-                return -1;
-            }
+        rc = MQTTYield(&hMQTTClient, 10);
+        if (rc != 0) {
+            UART_PRINT("rc = %d\n\r", rc);
+            return -1;
+        }
 
-            return 0;
+        sl_Close(n.my_socket);
+
+        return 0;
             // osi_Sleep(5000);
     //     }
     // }

@@ -97,7 +97,7 @@ static int g_iNetworkConnection = -1;
 
 //****************************************************************************
 //
-//!    \brief OOB Application Main Task - Initializes SimpleLink Driver and
+//! \brief OOB Application Main Task - Initializes SimpleLink Driver and
 //!                                              Handles HTTP Requests
 //! \param[in]                  pvParameters is the data passed to the Task
 //!
@@ -127,10 +127,10 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
-        osi_Sleep(1000);
-        GPIO_IF_LedOn(MCU_RED_LED_GPIO);
-        osi_Sleep(1000);
-        GPIO_IF_LedOff(MCU_RED_LED_GPIO);
+        // osi_Sleep(1000);
+        // GPIO_IF_LedOn(MCU_RED_LED_GPIO);
+        // osi_Sleep(1000);
+        // GPIO_IF_LedOff(MCU_RED_LED_GPIO);
 
         // read temp
         float fCurrentTemp;
@@ -143,7 +143,7 @@ static void OOBTask(void *pvParameters)
         if (rc < 0)
             UART_PRINT("error in reporting with mqtt\n\r");
         else
-            UART_PRINT("notify successful\n");
+            UART_PRINT("notify successful\n\r");
     }
 }
 
@@ -179,19 +179,6 @@ void main()
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
     }
-
-    //
-    // Create OOB Task
-    //
-    // UART_PRINT("Creating ButtonNotifyTask task...\n\r");
-    // lRetVal = osi_TaskCreate(ButtonNotifyTask, (signed char*)"ButtonNotifyTask", \
-    //                             OSI_STACK_SIZE, NULL, \
-    //                             OOB_TASK_PRIORITY, NULL );
-    // if(lRetVal < 0)
-    // {
-    //     ERR_PRINT(lRetVal);
-    //     LOOP_FOREVER();
-    // }
 
     //
     // Start OS Scheduler
