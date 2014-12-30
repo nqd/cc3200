@@ -21,7 +21,7 @@
 //! \return                        None
 //
 //****************************************************************************
-int buttonNotify(void)
+int doReport(int *sensor)
 {
     static unsigned int msg_id = 0;
     Network n;
@@ -59,11 +59,14 @@ int buttonNotify(void)
         UART_PRINT("tick\n\r");
         UART_PRINT("SW3\n\r");
 
+        char s_sensor[sizeof(int)+1];
+        snprintf(s_sensor, sizeof(int), "%d", *sensor);
+
         MQTTMessage msg;
         msg.dup = 0;
         msg.id = msg_id++;
-        msg.payload = "pushed";
-        msg.payloadlen = 7;
+        msg.payload = s_sensor;
+        msg.payloadlen = sizeof(*sensor);
         msg.qos = QOS0;
         msg.retained = 0;
         rc = MQTTPublish(&hMQTTClient, MQTT_TOPIC_BUTTON2, &msg);

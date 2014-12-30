@@ -135,11 +135,11 @@ static void OOBTask(void *pvParameters)
         // read temp
         float fCurrentTemp;
         TMP006DrvGetTemp(&fCurrentTemp);
-        char cTemp = (char)fCurrentTemp;
-        UART_PRINT("TMP006 Temp = %dF\n\r", cTemp);
+        int cTemp = (int)((fCurrentTemp-32)*5/9);
+        UART_PRINT("TMP006 Temp = %dC\n\r", cTemp);
 
         // report with mqtt
-        int rc = buttonNotify();
+        int rc = doReport(&cTemp);
         if (rc < 0)
             UART_PRINT("error in reporting with mqtt\n\r");
         else
