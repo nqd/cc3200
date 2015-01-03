@@ -101,7 +101,7 @@
 SlSecParams_t SecurityParams = {0}; // AP Security Parameters
 unsigned short g_usTimerInts = 0;   // Variable used in Timer Interrupt Handler
 
-#if defined(ccs)
+#if defined(ccs) || defined(gcc)
 extern void (* const g_pfnVectors[])(void);
 #endif
 #if defined(ewarm)
@@ -429,7 +429,7 @@ BoardInit(void)
     //
     // Set vector table base
     //
-#if defined(ccs)
+#if defined(ccs) || defined(gcc)
     MAP_IntVTableBaseSet((unsigned long)&g_pfnVectors[0]);
 #endif
 #if defined(ewarm)
