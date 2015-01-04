@@ -65,7 +65,7 @@ ${BINDIR}:
 #
 # Rules for building the deepsleep example.
 #
-${BINDIR}/deepsleep.axf: ${OBJDIR}/i2c_if.o
+#${BINDIR}/deepsleep.axf: ${OBJDIR}/i2c_if.o
 ${BINDIR}/deepsleep.axf: ${OBJDIR}/main.o
 ${BINDIR}/deepsleep.axf: ${OBJDIR}/pinmux.o
 ${BINDIR}/deepsleep.axf: ${OBJDIR}/gpio_if.o

@@ -177,7 +177,7 @@ i32 try_S4_no_irq(void)
           }
 #endif
 
-#ifdef ccs
+#if defined(ccs)
 #define BACK_UP_ARM_REGISTERS() {     \
         __asm(" push {r0-r12,LR} \n" \
           " movw r1, vault_arm_registers \n" \
@@ -197,6 +197,25 @@ i32 try_S4_no_irq(void)
           }
 #endif
 
+#if defined(gcc)
+#define BACK_UP_ARM_REGISTERS() {     \
+        __asm(" push {r0-r12,LR} \n" \
+          " mov r1, vault_arm_registers \n" \
+          " mov r1, vault_arm_registers \n" \
+          " mrs  r0,msp \n" \
+          " str  r0,[r1] \n" \
+          " mrs  r0,psp \n" \
+          " str  r0,[r1, #4] \n" \
+          " mrs  r0,primask \n" \
+          " str  r0,[r1, #12] \n" \
+          " mrs  r0,faultmask \n" \
+          " str  r0,[r1, #16] \n" \
+          " mrs  r0,basepri \n" \
+          " str  r0,[r1, #20] \n" \
+          " mrs  r0,control \n" \
+          " str  r0,[r1, #24] \n"); \
+          }
+#endif
 //static inline void restore_arm_registers()
 
 #ifdef ewarm
@@ -219,7 +238,7 @@ i32 try_S4_no_irq(void)
 #endif
 
 
-#ifdef ccs
+#if defined(ccs)
 #define RESTORE_ARM_REGISTERS() {        \
     __asm(" movw r1, vault_arm_registers \n" \
           " movt r1, vault_arm_registers \n" \
@@ -239,6 +258,25 @@ i32 try_S4_no_irq(void)
          }
 #endif
 
+#if defined(gcc)
+#define RESTORE_ARM_REGISTERS() {        \
+    __asm(" mov r1, vault_arm_registers \n" \
+          " mov r1, vault_arm_registers \n" \
+          " ldr  r0,[r1, #24] \n" \
+          " msr  control,r0 \n" \
+          " ldr  r0,[r1] \n" \
+          " msr  msp,r0 \n" \
+          " ldr  r0,[r1,#4] \n" \
+          " msr  psp,r0 \n" \
+          " ldr  r0,[r1, #12] \n" \
+          " msr  primask,r0 \n" \
+          " ldr  r0,[r1, #16] \n" \
+          " msr  faultmask,r0 \n" \
+          " ldr  r0,[r1, #20] \n" \
+          " msr  basepri,r0 \n" \
+          " pop  {r0-r12,LR} \n"); \
+         }
+#endif
 /* Called directly by boot ROM after waking from S3 state */
 void resume_from_S3(void)
 {
@@ -268,9 +306,9 @@ static void enter_into_S3(void)
                                 vault_arm_registers.psp/*save_restore[1]*/);
 
         /* Introducing delays to facilitate CPU to fade away ........ */
-        asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP"); 
-        asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP");
-        asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP"); asm(" NOP");
+        __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); 
+        __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP");
+        __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP"); __asm(" NOP");
 }
 
 static i32 do_try_S3_no_irq()

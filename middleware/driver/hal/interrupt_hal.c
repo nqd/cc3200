@@ -70,7 +70,7 @@ CPUipsr(void)
 }
 #pragma diag_default=Pe940
 #endif
-#if defined(ccs)
+#if defined(ccs) || defined(gcc)
 u32
 CPUipsr(void)
 {
