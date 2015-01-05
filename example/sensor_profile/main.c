@@ -103,9 +103,9 @@
 // Values for below macros shall be modified as per access-point(AP) properties
 // SimpleLink device will connect to following AP when application is executed
 //
-#define SSID_NAME         			"cc3200demo"	/* AP SSID */
-#define SECURITY_TYPE     			SL_SEC_TYPE_OPEN	/* Security type (OPEN or WEP or WPA)*/
-#define SECURITY_KEY      			""	/* Password of the secured AP */
+#define SSID_NAME         			"FIT_LAB"	/* AP SSID */
+#define SECURITY_TYPE     			SL_SEC_TYPE_WPA	/* Security type (OPEN or WEP or WPA)*/
+#define SECURITY_KEY      			"fit@dhcn"	/* Password of the secured AP */
 
 #define SPAWN_TASK_PRIORITY         9
 #define GPIO_13                     13
@@ -510,7 +510,7 @@ int WlanConnect()
     SlSecParams_t secParams;
 
     secParams.Key = (signed char *)SECURITY_KEY;
-    secParams.KeyLen = sizeof(secParams.Key);
+    secParams.KeyLen = strlen(SECURITY_KEY);
     secParams.Type = SECURITY_TYPE;
 
     //
@@ -935,7 +935,7 @@ void TimerGPIOTask(void *pvParameters)
     //
     // Set 5 sec timer allowing 5 sec of UDP Tx.
     //
-    tTimerHndl = SetTimer();
+    // tTimerHndl = SetTimer();
 
     g_ucTrafficEnable = 1;
     while(g_ucTrafficEnable == 1)
@@ -957,8 +957,8 @@ void TimerGPIOTask(void *pvParameters)
     //
     // stop and delete the timer
     //
-    cc_timer_stop(tTimerHndl);
-    cc_timer_delete(tTimerHndl);
+    // cc_timer_stop(tTimerHndl);
+    // cc_timer_delete(tTimerHndl);
 
     //
     //close the socket

@@ -13,12 +13,13 @@ include ${ROOT}/tools/gcc_scripts/makedefs
 # Where to find source files that do not live in this directory.
 #
 VPATH=..
-VPATH+=../../drivers
+VPATH+=../../driverlib
 VPATH+=../../common
-VPATH+=${ROOT}/middleware/driver
 VPATH+=${ROOT}/middleware/framework/pm
 VPATH+=${ROOT}/middleware/framework/timer
-VPATH+=${ROOT}/middleware/driver/hal
+VPATH+=${ROOT}/middleware/driver/hal 
+VPATH+=${ROOT}/middleware/driver
+VPATH+=${ROOT}/middleware/soc
 
 #
 # Additional Compiler Flags
@@ -34,9 +35,9 @@ IPATH+=../..
 IPATH+=../../common
 IPATH+=${ROOT}/middleware/framework/pm
 IPATH+=${ROOT}/middleware/framework/timer
-IPATH+=${ROOT}/middleware/soc
-IPATH+=${ROOT}/middleware/driver/hal
+IPATH+=${ROOT}/middleware/driver/hal 
 IPATH+=${ROOT}/middleware/driver
+IPATH+=${ROOT}/middleware/soc
 IPATH+=${ROOT}/inc
 IPATH+=${ROOT}/oslib
 IPATH+=${ROOT}/driverlib
@@ -79,15 +80,22 @@ ${BINDIR}/sensor_profile.axf: ${OBJDIR}/pinmux.o
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/lp3p0_board.o
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/lp3p0_plat_ops.o
 
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/gpio_if.o
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/uart_if.o
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/uart_drv.o
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/wdt_if.o
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/cc_pm.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/spi_hal.o
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/cc_timer.o
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/uart_hal.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/cc_io_park.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/cc_pm_ops.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/cc_pm.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/uart_drv.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/spi_drv.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/hw_timer32.o
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/gpio_hal.o
-${BINDIR}/sensor_profile.axf: ${OBJDIR}/rtc_hal.o 
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/rtc_hal.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/interrupt_hal.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/uart_hal.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/dma_hal.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/wdt_if.o
+${BINDIR}/sensor_profile.axf: ${OBJDIR}/utils_if.o
 
 ${BINDIR}/sensor_profile.axf: ${OBJDIR}/startup_${COMPILER}.o
 ${BINDIR}/sensor_profile.axf: ${ROOT}/simplelink/${COMPILER}/${BINDIR}/libsimplelink.a

@@ -71,7 +71,7 @@
 #include "user_app_config.h"
 
 #define CTL_TBL_SIZE	        64	//32*2 entries
-#ifdef ccs
+#if defined(ccs) || defined(gcc)
 #pragma DATA_ALIGN(dma_ctrl_table, 1024)
 tDMAControlTable dma_ctrl_table[CTL_TBL_SIZE];
 #else
