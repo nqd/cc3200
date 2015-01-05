@@ -59,7 +59,7 @@ extern "C"
 //
 #define SSID_NAME           "FIT_LAB"    /* AP SSID */
 #define SECURITY_TYPE       SL_SEC_TYPE_WPA/* Security type (OPEN or WEP or WPA*/
-#define SECURITY_KEY        "fit@dh"              /* Password of the secured AP */
+#define SECURITY_KEY        "fit@dhcn"              /* Password of the secured AP */
 #define SSID_LEN_MAX        32
 #define BSSID_LEN_MAX       6
 

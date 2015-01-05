@@ -53,7 +53,9 @@
 #include "utils.h"
 #include "prcm.h"
 
-// free-rtos/TI-rtos include#include "osi.h"
+// free-rtos/TI-rtos include
+#include "osi.h"
+
 // common interface includes 
 #include "nw_if.h"
 #include "common.h"
@@ -132,8 +134,8 @@ vApplicationIdleHook( void)
     //
     DBG_PRINT("DEEPSLEEP: Entering DeepSleep\n\r");
     
-    //MAP_UtilsDelay(80000);
-    for(iRetVal = 0; iRetVal < 80000; iRetVal++);
+    MAP_UtilsDelay(80000);
+    // for(iRetVal = 0; iRetVal < 80000; iRetVal++);
     
     //
     // Disable the SYSTICK interrupt
@@ -725,7 +727,6 @@ Network_IF_InitDriver(unsigned int uiMode)
     long lRetVal = -1;
     // Reset CC3200 Network State Machine
     InitializeAppVariables();
-
     //
     // Following function configure the device to default state by cleaning
     // the persistent settings stored in NVMEM (viz. connection profiles &
