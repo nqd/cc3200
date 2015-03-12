@@ -58,6 +58,14 @@ extern "C" {
 /* Macro declarations                                                        */
 /*****************************************************************************/
 
+/* Avoid redifined warning */
+#undef FD_SETSIZE
+#undef FD_SET
+#undef FD_CLR
+#undef FD_ISSET
+#undef FD_ZERO
+#undef fd_set
+
 #define SL_FD_SETSIZE                         SL_MAX_SOCKETS         /* Number of sockets to select on - same is max sockets!               */
 #define BSD_SOCKET_ID_MASK                     (0x0F)                 /* Index using the LBS 4 bits for socket id 0-7 */
 /* Define some BSD protocol constants.  */
