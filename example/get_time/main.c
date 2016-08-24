@@ -349,7 +349,7 @@ long GetSNTPTime(unsigned char ucGmtDiffHr, unsigned char ucGmtDiffMins)
         //
         // day, number of days since beginning of 2013
         //
-        g_sAppData.isGeneralVar = g_sAppData.ulElapsedSec/SEC_IN_DAY;
+        g_sAppData.isGeneralVar = g_sAppData.ulElapsedSec / SEC_IN_DAY;
         memcpy(g_sAppData.pcCCPtr,
                g_acDaysOfWeek2013[g_sAppData.isGeneralVar%7], 3);
         g_sAppData.pcCCPtr += 3;
@@ -359,10 +359,10 @@ long GetSNTPTime(unsigned char ucGmtDiffHr, unsigned char ucGmtDiffMins)
         // year
         // number of days since beginning of 2013
         //
-        g_sAppData.ulGeneralVar = g_sAppData.ulElapsedSec/SEC_IN_DAY;
+        g_sAppData.ulGeneralVar = g_sAppData.ulElapsedSec / SEC_IN_DAY;
         g_sAppData.ulGeneralVar /= 365;
         g_sAppData.uisCCLen = itoa(YEAR2013 + g_sAppData.ulGeneralVar,
-        g_sAppData.pcCCPtr);
+                                    g_sAppData.pcCCPtr);
         g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
         
         int Year = 0;
@@ -371,103 +371,103 @@ long GetSNTPTime(unsigned char ucGmtDiffHr, unsigned char ucGmtDiffMins)
         
         if(((Year % 4 == 0) && (Year % 100 != 0))||(Year % 400 == 0))
         {
-        //
-        // month
-        //
-        g_sAppData.isGeneralVar %= 365;
-        for (iIndex = 0; iIndex < 12; iIndex++)
-        {
-        g_sAppData.isGeneralVar -= g_acNumOfDaysPerMonth[iIndex];
-        if (g_sAppData.isGeneralVar < 0)
-        break;
-        }
-        if(iIndex == 12)
-        {
-        iIndex = 0;
-        }
-        memcpy(g_sAppData.pcCCPtr, g_acMonthOfYear[iIndex], 3);
-        g_sAppData.pcCCPtr += 3;
-        *g_sAppData.pcCCPtr++ = '\x20';
-        
-        //
-        // date
-        // restore the day in current month
-        //
-        
-        g_sAppData.isGeneralVar += g_acNumOfDaysPerMonth[iIndex];
-        g_sAppData.uisCCLen = itoa(g_sAppData.isGeneralVar + 1,
-        g_sAppData.pcCCPtr);
-        g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
-        *g_sAppData.pcCCPtr++ = '\x20';
-        }
-        else
-        {
-        //
-        // month
-        //
-        g_sAppData.isGeneralVar %= 365;
-        for (iIndex = 0; iIndex < 12; iIndex++)
-        {
-        g_sAppData.isGeneralVar -= g_acNumOfDaysPerMonthNonLeapYear[iIndex];
-        if (g_sAppData.isGeneralVar < 0)
-        break;
-        }
-        if(iIndex == 12)
-        {
-        iIndex = 0;
-        }
-        memcpy(g_sAppData.pcCCPtr, g_acMonthOfYear[iIndex], 3);
-        g_sAppData.pcCCPtr += 3;
-        *g_sAppData.pcCCPtr++ = '\x20';
-        
-        //
-        // date
-        // restore the day in current month
-        //
-        
-        g_sAppData.isGeneralVar += g_acNumOfDaysPerMonthNonLeapYear[iIndex];
-        g_sAppData.uisCCLen = itoa(g_sAppData.isGeneralVar + 1,
-        g_sAppData.pcCCPtr);
-        g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
-        *g_sAppData.pcCCPtr++ = '\x20';
-        
-        }
-        
-        //
-        // time
-        //
-        g_sAppData.ulGeneralVar = g_sAppData.ulElapsedSec%SEC_IN_DAY;
-        
-        // number of seconds per hour
-        g_sAppData.ulGeneralVar1 = g_sAppData.ulGeneralVar%SEC_IN_HOUR;
-        
-        // number of hours
-        g_sAppData.ulGeneralVar /= SEC_IN_HOUR;
-        g_sAppData.uisCCLen = itoa(g_sAppData.ulGeneralVar,
-        g_sAppData.pcCCPtr);
-        g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
-        *g_sAppData.pcCCPtr++ = ':';
-        
-        // number of minutes per hour
-        g_sAppData.ulGeneralVar = g_sAppData.ulGeneralVar1/SEC_IN_MIN;
-        
-        // number of seconds per minute
-        g_sAppData.ulGeneralVar1 %= SEC_IN_MIN;
-        g_sAppData.uisCCLen = itoa(g_sAppData.ulGeneralVar,
-        g_sAppData.pcCCPtr);
-        g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
-        *g_sAppData.pcCCPtr++ = ':';
-        g_sAppData.uisCCLen = itoa(g_sAppData.ulGeneralVar1,
-        g_sAppData.pcCCPtr);
-        g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
-        *g_sAppData.pcCCPtr++ = '\0';
-
-
-        UART_PRINT("response from server: ");
-        UART_PRINT((char *)g_acSNTPserver);
-        UART_PRINT("\n\r");
-        UART_PRINT(g_sAppData.acTimeStore);
-        UART_PRINT("\n\r\n\r");
+            //
+            // month
+            //
+            g_sAppData.isGeneralVar %= 365;
+            for (iIndex = 0; iIndex < 12; iIndex++)
+            {
+                g_sAppData.isGeneralVar -= g_acNumOfDaysPerMonth[iIndex];
+                if (g_sAppData.isGeneralVar < 0)
+                break;
+            }
+            if(iIndex == 12)
+            {
+                iIndex = 0;
+            }
+            memcpy(g_sAppData.pcCCPtr, g_acMonthOfYear[iIndex], 3);
+            g_sAppData.pcCCPtr += 3;
+            *g_sAppData.pcCCPtr++ = '\x20';
+            
+            //
+            // date
+            // restore the day in current month
+            //
+            
+            g_sAppData.isGeneralVar += g_acNumOfDaysPerMonth[iIndex];
+            g_sAppData.uisCCLen = itoa (g_sAppData.isGeneralVar + 1,
+                                        g_sAppData.pcCCPtr);
+            g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
+            *g_sAppData.pcCCPtr++ = '\x20';
+            }
+            else
+            {
+            //
+            // month
+            //
+            g_sAppData.isGeneralVar %= 365;
+            for (iIndex = 0; iIndex < 12; iIndex++)
+            {
+                g_sAppData.isGeneralVar -= g_acNumOfDaysPerMonthNonLeapYear[iIndex];
+                if (g_sAppData.isGeneralVar < 0)
+                break;
+            }
+            if(iIndex == 12)
+            {
+                iIndex = 0;
+            }
+            memcpy(g_sAppData.pcCCPtr, g_acMonthOfYear[iIndex], 3);
+            g_sAppData.pcCCPtr += 3;
+            *g_sAppData.pcCCPtr++ = '\x20';
+            
+            //
+            // date
+            // restore the day in current month
+            //
+            
+            g_sAppData.isGeneralVar += g_acNumOfDaysPerMonthNonLeapYear[iIndex];
+            g_sAppData.uisCCLen = itoa (g_sAppData.isGeneralVar + 1,
+                                        g_sAppData.pcCCPtr);
+            g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
+            *g_sAppData.pcCCPtr++ = '\x20';
+            
+            }
+            
+            //
+            // time
+            //
+            g_sAppData.ulGeneralVar = g_sAppData.ulElapsedSec%SEC_IN_DAY;
+            
+            // number of seconds per hour
+            g_sAppData.ulGeneralVar1 = g_sAppData.ulGeneralVar%SEC_IN_HOUR;
+            
+            // number of hours
+            g_sAppData.ulGeneralVar /= SEC_IN_HOUR;
+            g_sAppData.uisCCLen = itoa (g_sAppData.ulGeneralVar,
+                                        g_sAppData.pcCCPtr);
+            g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
+            *g_sAppData.pcCCPtr++ = ':';
+            
+            // number of minutes per hour
+            g_sAppData.ulGeneralVar = g_sAppData.ulGeneralVar1/SEC_IN_MIN;
+            
+            // number of seconds per minute
+            g_sAppData.ulGeneralVar1 %= SEC_IN_MIN;
+            g_sAppData.uisCCLen = itoa (g_sAppData.ulGeneralVar,
+                                        g_sAppData.pcCCPtr);
+            g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
+            *g_sAppData.pcCCPtr++ = ':';
+            g_sAppData.uisCCLen = itoa (g_sAppData.ulGeneralVar1,
+                                        g_sAppData.pcCCPtr);
+            g_sAppData.pcCCPtr += g_sAppData.uisCCLen;
+            *g_sAppData.pcCCPtr++ = '\0';
+    
+    
+            UART_PRINT("response from server: ");
+            UART_PRINT((char *) g_acSNTPserver);
+            UART_PRINT("\n\r");
+            UART_PRINT(g_sAppData.acTimeStore);
+            UART_PRINT("\n\r\n\r");
     }
     return SUCCESS;
 }
